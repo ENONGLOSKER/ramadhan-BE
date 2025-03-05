@@ -111,7 +111,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'Asia/Makassar'  # Zona waktu WITA
+TIME_ZONE = 'Asia/Jakarta'  # Zona waktu WITA
 USE_TZ = True  # Pastikan ini diatur ke True untuk menggunakan zona waktu yang benar
 
 

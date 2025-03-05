@@ -111,20 +111,19 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'Asia/Jakarta'  # Zona waktu WITA
+TIME_ZONE = 'Asia/Makassar'  # Zona waktu WITA
 USE_TZ = True  # Pastikan ini diatur ke True untuk menggunakan zona waktu yang benar
-
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
-STATIC_ROOT =os.path.join(BASE_DIR, 'staticfiles')
-MEDIA_URL = '/media/'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static')
-]
+# STATIC_ROOT =os.path.join(BASE_DIR, 'staticfiles')
+# MEDIA_URL = '/media/'
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'static')
+# ]
 
 
 # Default primary key field type

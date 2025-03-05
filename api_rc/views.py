@@ -26,6 +26,7 @@ def countdown_waktu_sholat(request):
 
     # Ambil waktu saat ini
     sekarang = timezone.now().time()
+    print(sekarang)
 
     # Daftar waktu solat beserta nama sholatnya
     waktu_sholat = [

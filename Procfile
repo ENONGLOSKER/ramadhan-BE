@@ -1,0 +1,1 @@
+web: gunicorn ramadhanCompanion.wsgi --log-file -

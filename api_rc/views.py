@@ -25,7 +25,7 @@ def countdown_waktu_sholat(request):
         return Response({"error": "Jadwal salat tidak ditemukan."}, status=status.HTTP_404_NOT_FOUND)
 
     # Ambil waktu saat ini
-    sekarang = timezone.now().time()
+    sekarang = timezone.now().astimezone().time()
     print(sekarang)
 
     # Daftar waktu solat beserta nama sholatnya

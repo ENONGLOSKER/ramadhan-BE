@@ -13,68 +13,6 @@ import pandas as pd
 from datetime import datetime, timedelta
 from rest_framework.permissions import IsAuthenticated
 
-@api_view(['GET'])
-def countdown_waktu_sholat(request):
-    # Ambil tanggal hari ini
-    tanggal_sekarang = timezone.now().date()
-
-    try:
-        # Ambil jadwal salat untuk hari ini
-        jadwal = JadwalSalat.objects.get(tanggal=tanggal_sekarang)
-    except JadwalSalat.DoesNotExist:
-        return Response({"error": "Jadwal salat tidak ditemukan."}, status=status.HTTP_404_NOT_FOUND)
-
-    # Ambil waktu saat ini
-    sekarang = timezone.now().astimezone().time()
-    print(sekarang)
-
-    # Daftar waktu solat beserta nama sholatnya
-    waktu_sholat = [
-        {"nama": "Imsak", "waktu": jadwal.imsak},
-        {"nama": "Subuh", "waktu": jadwal.subuh},
-        {"nama": "Dzuhur", "waktu": jadwal.dzuhur},
-        {"nama": "Ashar", "waktu": jadwal.ashar},
-        {"nama": "Maghrib", "waktu": jadwal.maghrib},
-        {"nama": "Isya", "waktu": jadwal.isya},
-    ]
-
-    # Cari waktu solat berikutnya
-    sholat_berikutnya = None
-    for sholat in waktu_sholat:
-        if sekarang < sholat["waktu"]:
-            sholat_berikutnya = sholat
-            break
-
-    # Jika tidak ada sholat berikutnya hari ini, gunakan Imsak besok
-    if not sholat_berikutnya:
-        try:
-            jadwal_besok = JadwalSalat.objects.get(tanggal=tanggal_sekarang + timedelta(days=1))
-            sholat_berikutnya = {"nama": "Imsak (Besok)", "waktu": jadwal_besok.imsak}
-        except JadwalSalat.DoesNotExist:
-            return Response({"error": "Jadwal salat besok tidak ditemukan."}, status=status.HTTP_404_NOT_FOUND)
-
-    # Hitung selisih waktu
-    waktu_berikutnya = datetime.combine(tanggal_sekarang, sholat_berikutnya["waktu"])
-    sekarang_datetime = datetime.combine(tanggal_sekarang, sekarang)
-    selisih = waktu_berikutnya - sekarang_datetime
-
-    # Jika waktu sholat berikutnya adalah besok, tambahkan 1 hari
-    if selisih.total_seconds() < 0:
-        waktu_berikutnya += timedelta(days=1)
-        selisih = waktu_berikutnya - sekarang_datetime
-
-    # Format countdown
-    jam, sisa = divmod(int(selisih.total_seconds()), 3600)
-    menit, detik = divmod(sisa, 60)
-    countdown = f"{jam:02}:{menit:02}:{detik:02}"
-
-    # Kembalikan respons API
-    return Response({
-        "sholat_berikutnya": sholat_berikutnya["nama"],
-        "waktu_berikutnya": sholat_berikutnya["waktu"].strftime("%H:%M"),
-        "countdown": countdown
-    })
-
 # Endpoint untuk mendapatkan jadwal salat berdasarkan tanggal
 @api_view(['GET'])
 def jadwal_salat(request):
@@ -205,15 +143,16 @@ def waktu_sholat_sekarang(request):
 # misi ramadahan
 # Endpoint untuk mendapatkan misi harian
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def misi_harian(request):
     tanggal_sekarang = timezone.now().date()
-    misi = MisiRamadan.objects.filter(tanggal=tanggal_sekarang).first()
+    misi = MisiRamadan.objects.filter(tanggal=tanggal_sekarang)
 
     if not misi:
         return Response({"error": "Tidak ada misi untuk hari ini."}, status=status.HTTP_404_NOT_FOUND)
 
-    serializer = MisiRamadanSerializer(misi)
+    # Serialize semua instance dari misi
+    serializer = MisiRamadanSerializer(misi, many=True)
     return Response(serializer.data)
 
 # Endpoint untuk menandai misi sebagai selesai

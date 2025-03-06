@@ -7,11 +7,9 @@ from .views import (
     waktu_sholat_sekarang,
     misi_harian, tandai_misi_selesai, statistik_pencapaian,
     tambah_aktivitas, lihat_pohon_amal, bandingkan_pohon_amal,
-    countdown_waktu_sholat,
 )
 
 urlpatterns = [
-    path('countdown_waktu/', countdown_waktu_sholat, name='countdown_waktu'),
     path('jadwal-salat/', jadwal_salat, name='jadwal-solat'),
     path('adzan-sound/', adzan_sound, name='adzan-sound'),
     path('hitung-mundur/', hitung_mundur, name='hitung-mundur'),

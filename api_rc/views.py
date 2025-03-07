@@ -157,7 +157,7 @@ def misi_harian(request):
 
 # Endpoint untuk menandai misi sebagai selesai
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated])
 def tandai_misi_selesai(request):
     tanggal_sekarang = timezone.now().date()
     misi = MisiRamadan.objects.filter(tanggal=tanggal_sekarang).first()
